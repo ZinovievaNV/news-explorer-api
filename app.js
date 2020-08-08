@@ -11,8 +11,8 @@ const { createUserValidation, loginUserValidation } = require('./middlewares/use
 const NotFoundError = require('./errors/not-found-err');
 const handlerError = require('./middlewares/handler-error');
 const { limiter } = require('./middlewares/rate-limiter');
-
-const { PORT = 3000 } = process.env;
+const { DATABASE, PORT } = require('./configuration/conf');
+const { SERVER_WILL_CRASH, THE_RESOURSE_IS_NOT_FOUND } = require('./configuration/constants');
 
 const auth = require('./middlewares/auth');
 const articlesRouter = require('./routes/articles');
@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 async function start() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/mestodb', {
+    await mongoose.connect(DATABASE, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
@@ -39,7 +39,7 @@ async function start() {
       console.log(`App listening on port ${PORT}`);
     });
   } catch (error) {
-    console.log(`${error} В старте`);
+    console.log(`${error}`);
   }
 }
 
@@ -47,7 +47,7 @@ app.use(requestLogger);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
+    throw new Error(SERVER_WILL_CRASH);
   }, 0);
 });
 
@@ -58,7 +58,7 @@ app.use(auth);
 app.use('/articles', articlesRouter);
 app.use('/users', usersRouter);
 app.all('*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не найден');
+  throw new NotFoundError(THE_RESOURSE_IS_NOT_FOUND);
 });
 app.use(errorLogger);
 app.use(errors());

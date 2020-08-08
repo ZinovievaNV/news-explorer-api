@@ -1,11 +1,12 @@
 const Article = require('../models/article');
 const NoAccessRights = require('../errors/no-access-rights');
 const NotFoundError = require('../errors/not-found-err');
+const { ARTICLE_REMOVED, ARTICLE_CANNOT_BE_DELETED, ARTICLE_NOT_FOUND } = require('../configuration/constants');
 
 module.exports = {
   // Возвращает все сохранённые пользователем статьи
   getArticles(req, res, next) {
-    Article.findById({ _id: req.user._id }).select('+owner')
+    Article.find({ owner: req.user._id }).select('+owner')
       .populate(['owner'])
       .then((articles) => res.send({ data: articles }))
       .catch(next);
@@ -24,15 +25,14 @@ module.exports = {
   // Удаляет сохранённую статью  по _id
   deleteArticleById(req, res, next) {
     Article.findById({ _id: req.params.articleId }).select('+owner')
-      .orFail(new NotFoundError('Статья не найдена'))
-      // eslint-disable-next-line consistent-return
+      .orFail(new NotFoundError(ARTICLE_NOT_FOUND))
       .then((article) => {
         if (!(article.owner.toString() === req.user._id.toString())) {
-          throw new NoAccessRights('это не Ваша статья, её нельзя удалить!');
+          throw new NoAccessRights(ARTICLE_CANNOT_BE_DELETED);
         }
         Article.deleteOne({ _id: article._id })
           .then(() => {
-            res.send({ message: 'Статья удалена' });
+            res.send({ ARTICLE_REMOVED });
           })
           .catch(next);
       })

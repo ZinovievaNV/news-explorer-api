@@ -1,6 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 Joi.objectId = require('joi-objectid')(Joi);
 const { errorMessage } = require('../configuration/constants');
+const { FIELD_ID } = require('../configuration/constants');
 
 const createUserValidation = celebrate({
   body: Joi.object().keys({
@@ -45,7 +46,7 @@ const loginUserValidation = celebrate({
 
 const userIdValidation = celebrate({
   params: Joi.object({
-    userId: Joi.objectId().message('Поле userId должно быть не больше 24 символов'),
+    userId: Joi.objectId().message(FIELD_ID),
   }),
 });
 

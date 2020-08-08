@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { ENTER_LINK } = require('../configuration/constants');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
@@ -19,7 +20,7 @@ const articleSchema = new mongoose.Schema({
       validator(v) {
         return validator.isURL(v);
       },
-      message: 'Введите ссылку!',
+      message: ENTER_LINK,
     },
     type: String,
     required: true,
@@ -43,7 +44,7 @@ const articleSchema = new mongoose.Schema({
       validator(v) {
         return validator.isURL(v);
       },
-      message: 'Введите ссылку!',
+      message: ENTER_LINK,
     },
     type: String,
     required: true,

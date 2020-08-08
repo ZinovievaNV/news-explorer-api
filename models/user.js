@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-// const uniqueValidator = require('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
+const { INVALID_MAIL_FORMAT, INCORRECT_EMAIL_OR_PASS, EMAIL_CONFLIG} = require('../configuration/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -18,7 +19,7 @@ const userSchema = new mongoose.Schema({
     validator(v) {
       return validator.isEmail(v);
     },
-    message: 'Неправильный формат почты',
+    message: INVALID_MAIL_FORMAT,
   },
   password: {
     type: String,
@@ -26,18 +27,18 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
 });
-// eslint-disable-next-line func-names
+
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject(new Error(INCORRECT_EMAIL_OR_PASS));
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject(new Error(INCORRECT_EMAIL_OR_PASS));
           }
 
           return user;
@@ -45,6 +46,6 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     });
 };
 
-// userSchema.plugin(uniqueValidator, { message: 'Пользователь с таким {PATH} уже существует.' });
+userSchema.plugin(uniqueValidator, { message: EMAIL_CONFLIG });
 
 module.exports = mongoose.model('user', userSchema);

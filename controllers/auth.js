@@ -1,10 +1,10 @@
-const { NODE_ENV, JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const Unauthorized = require('../errors/unauthorized');
 const Conflict = require('../errors/conflict');
 const BadRequest = require('../errors/bad-request');
+const SECRET = require('../configuration/conf');
 
 module.exports = {
   login(req, res, next) {
@@ -14,7 +14,7 @@ module.exports = {
       .then((user) => {
         res.send({
           token: jwt.sign({ _id: user._id },
-            NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }),
+            SECRET),
 
         });
       })
@@ -22,7 +22,7 @@ module.exports = {
         next(new Unauthorized(`${error.message}`));
       });
   },
-  // eslint-disable-next-line consistent-return
+
   createUser(req, res, next) {
     const {
       name, email,
@@ -35,13 +35,12 @@ module.exports = {
       .then(() => res.status(201).send({
         data: name, email, message: 'Вы создались!',
       }))
-      // eslint-disable-next-line consistent-return
       .catch((error) => {
         if (error.name === 'ValidationError') {
           if (error.errors.email && error.errors.email.kind === 'unique') {
             next(new Conflict(error.errors.email.properties.message));
           } else {
-            next(new BadRequest(error.message));
+            next(new BadRequest(error));
           }
         } else {
           next(error);

@@ -10,6 +10,13 @@
         ]
       }
     ],
-    "no-console": "off"
+    "no-console": "off",
+    "consistent-return":
+    ["error",
+      {
+        "treatUndefinedAsUnspecified": true
+      }
+    ],
+    "func-names": ["error","never"]
   }
 }

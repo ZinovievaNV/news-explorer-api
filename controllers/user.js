@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');// 404 код
+const { USER_NOT_FOUND } = require('../configuration/constants');
 
 module.exports = {
   // Возвращает информацию о пользователе (email и имя)
@@ -8,7 +9,7 @@ module.exports = {
 
       .then((user) => {
         if (!user) {
-          throw new NotFoundError('Нет пользователя с таким id');
+          throw new NotFoundError(USER_NOT_FOUND);
         }
         res.send({ name: user.name, email: user.email });
       })
