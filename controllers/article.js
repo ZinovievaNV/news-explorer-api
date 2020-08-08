@@ -1,4 +1,3 @@
-
 const Article = require('../models/article');
 const NoAccessRights = require('../errors/no-access-rights');
 const NotFoundError = require('../errors/not-found-err');
@@ -31,12 +30,13 @@ module.exports = {
         if (!(article.owner.toString() === req.user._id.toString())) {
           throw new NoAccessRights('это не Ваша статья, её нельзя удалить!');
         }
-        return Article.deleteOne({ _id: article._id })
+        Article.deleteOne({ _id: article._id })
           .then(() => {
             res.send({ message: 'Статья удалена' });
           })
           .catch(next);
-      });
+      })
+      .catch(next);
   },
 
 };

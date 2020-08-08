@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { createUser, login } = require('./controllers/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { createUserValidation, loginUserValidation } = require('./middlewares/user-validation');
 const NotFoundError = require('./errors/not-found-err');
 const handlerError = require('./middlewares/handler-error');
+const { limiter } = require('./middlewares/rate-limiter');
 
 const { PORT = 3000 } = process.env;
 
@@ -19,10 +19,6 @@ const articlesRouter = require('./routes/articles');
 const usersRouter = require('./routes/users');
 
 const app = express();
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
 
 app.use(limiter);
 app.use(helmet());

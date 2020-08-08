@@ -1,7 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 Joi.objectId = require('joi-objectid')(Joi);
 const urlValidation = require('./url-validate');
-const { errorMessage } = require('../errors/error-message');
+const { errorMessage } = require('../configuration/constants');
 
 const articleValidation = celebrate({
   body: Joi.object().keys({

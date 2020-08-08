@@ -13,7 +13,6 @@ module.exports = {
     return User.findUserByCredentials(email, password)
       .then((user) => {
         res.send({
-          // eslint-disable-next-line no-underscore-dangle
           token: jwt.sign({ _id: user._id },
             NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }),
 
