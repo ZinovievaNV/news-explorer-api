@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
-const { INVALID_MAIL_FORMAT, INCORRECT_EMAIL_OR_PASS, EMAIL_CONFLIG} = require('../configuration/constants');
+const { INVALID_MAIL_FORMAT, INCORRECT_EMAIL_OR_PASS, EMAIL_CONFLIG } = require('../configuration/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
