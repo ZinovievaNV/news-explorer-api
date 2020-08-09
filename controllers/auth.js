@@ -4,7 +4,7 @@ const User = require('../models/user');
 const Unauthorized = require('../errors/unauthorized');
 const Conflict = require('../errors/conflict');
 const BadRequest = require('../errors/bad-request');
-const {SECRET} = require('../configuration/conf');
+const { SECRET } = require('../configuration/conf');
 
 module.exports = {
   login(req, res, next) {
