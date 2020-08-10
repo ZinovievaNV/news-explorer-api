@@ -35,7 +35,7 @@ async function start() {
       useUnifiedTopology: true,
     });
 
-    app.listen(PORT, () => {
+    app.listen(PORT || 3000, () => {
       console.log(`App listening on port ${PORT}`);
     });
   } catch (error) {
