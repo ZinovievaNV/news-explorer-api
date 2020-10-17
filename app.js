@@ -14,6 +14,7 @@ const { limiter } = require('./middlewares/rate-limiter');
 const { DATABASE, PORT } = require('./configuration/conf');
 const { SERVER_WILL_CRASH, THE_RESOURSE_IS_NOT_FOUND } = require('./configuration/constants');
 
+const cors = require('./middlewares/cors');
 const auth = require('./middlewares/auth');
 const articlesRouter = require('./routes/articles');
 const usersRouter = require('./routes/users');
@@ -25,6 +26,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors);
 
 async function start() {
   try {
