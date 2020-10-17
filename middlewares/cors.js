@@ -1,4 +1,4 @@
-const cors = (err, req, res, next) => {
+const cors = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
 
   next();
