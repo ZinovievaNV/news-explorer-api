@@ -3,7 +3,10 @@ const allowedCors = [
   'http://api.news-explorer-yp.tk',
   'https://news-explorer-yp.tk',
   'http://news-explorer-yp.tk',
-  'localhost',
+  'http://localhost:8080',
+  'https://localhost:8080',
+  'http://localhost',
+  'https://localhost',
 ];
 
 const cors = (err, req, res, next) => {
