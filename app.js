@@ -23,10 +23,10 @@ const app = express();
 
 app.use(limiter);
 app.use(helmet());
+app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors);
 
 async function start() {
   try {
