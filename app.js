@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const { createUser, login } = require('./controllers/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { createUserValidation, loginUserValidation } = require('./middlewares/user-validation');
@@ -14,13 +15,12 @@ const { limiter } = require('./middlewares/rate-limiter');
 const { DATABASE, PORT } = require('./configuration/conf');
 const { SERVER_WILL_CRASH, THE_RESOURSE_IS_NOT_FOUND } = require('./configuration/constants');
 
-const cors = require('./middlewares/cors');
 const auth = require('./middlewares/auth');
 const articlesRouter = require('./routes/articles');
 const usersRouter = require('./routes/users');
 
 const app = express();
-
+app.use(cors());
 app.use(limiter);
 app.use(helmet());
 app.use(cors);
@@ -46,7 +46,7 @@ async function start() {
 }
 
 app.use(requestLogger);
-
+app.options('*', cors());
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error(SERVER_WILL_CRASH);
